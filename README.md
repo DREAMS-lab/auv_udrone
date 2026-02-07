@@ -1,7 +1,50 @@
-# AUV UDrone
+# AUV uDrone
 
-Custom PX4 airframe and Gazebo SITL simulation for a torpedo-shaped autonomous
-underwater vehicle (AUV) with Blue Robotics T200 thrusters.
+[![GitHub](https://img.shields.io/badge/GitHub-DREAMS--lab%2Fauv__udrone-blue?logo=github)](https://github.com/DREAMS-lab/auv_udrone)
+
+PX4 airframe definition and Gazebo Harmonic SITL simulation for the **uDrone**,
+an autonomous underwater vehicle developed at ASU
+[DREAMS Lab](https://search.asu.edu/profile/2aborning) as part of the
+[CoRAL (Collaborative Robotic Aquatic Laboratory)](https://github.com/Earth-Innovation-Hub/CoRAL)
+project.
+
+## Project Context
+
+uDrone is a custom AUV designed for terrain-following and semantic mapping of
+coral reef systems. It operates as part of a collaborative multi-robot team
+alongside the *Robo-boat-o* autonomous surface vessel and aerial imaging
+systems, enabling high-resolution data collection across the water column from
+100 m depth to 100 m altitude.
+
+The vehicle can operate tethered or untethered in tandem with the robotic boat.
+Tethered mode provides tighter communication for testing new science autonomy
+algorithms and GNC tuning, while untethered operation is used for field
+experiments. The system communicates using MAVLink protocol and is networked
+using ROS.
+
+### Onboard Systems
+
+| System | Hardware |
+|--------|----------|
+| Flight controller | Pixhawk Cube 2.1 running PX4 |
+| Compute | Intel NUC i7 + Neural Compute Stick, or Jetson TX2 + Celeron x86 |
+| Vision | Intel RealSense T265 (stereo fisheye) + RGB HD camera |
+| Battery | 12 V 30 Ah LiFePO4 (4S) |
+| Thrusters | 4 × Blue Robotics T200 |
+
+The vision package enables visual-inertial odometry (VIO) and semantic SLAM for
+autonomous terrain-relative reef mapping. Stacked controllers provide position,
+velocity, attitude, and attitude-rate control.
+
+### Field Deployments
+
+The vehicle has been developed and tested at pool facilities, and deployed at
+the Bermuda Institute of Ocean Sciences (BIOS). Testing is documented in video:
+
+- [2020 pool test](https://www.youtube.com/watch?v=sM6XzXgjIlo)
+- [2022 field test](https://www.youtube.com/watch?v=zxxR6npl8X8&t=2s)
+- [2023 onboard cameras](https://youtu.be/JJ8X70HSR94)
+- [2023 external footage](https://www.youtube.com/shorts/YMnUrwg8ljE)
 
 ## Vehicle Specifications
 
@@ -12,7 +55,7 @@ underwater vehicle (AUV) with Blue Robotics T200 thrusters.
 | Total mass | 13 kg |
 | Thrusters | 4 × Blue Robotics T200 (0.344 kg each) |
 | Battery | 12 V 30 Ah LiFePO4 (4S) |
-| Airframe ID | 60003 |
+| PX4 Airframe ID | 60003 |
 | MAV_TYPE | 12 (Submarine) |
 
 ### Thruster Layout
@@ -38,6 +81,16 @@ with added mass and drag coefficients derived from the hull geometry:
   area (Cd=1.1) including T200 thruster frames
 - **Linear drag**: viscous skin-friction for low-speed regime
 
+### Sensors (Gazebo SITL)
+
+| Sensor | Source | EKF2 Fusion |
+|--------|--------|-------------|
+| IMU | Gazebo `imu_sensor` | Always |
+| Magnetometer | Gazebo `magnetometer_sensor` + MAGSIM | Heading |
+| Barometer | `SENS_EN_BAROSIM` | Depth/pressure |
+| GPS | `SENS_EN_GPSSIM` | Disabled (`EKF2_GPS_CTRL=0`) |
+| External Vision (VIO) | Gazebo `OdometryPublisher` | Position + yaw (`EKF2_EV_CTRL=15`) |
+
 ## Repository Structure
 
 ```
@@ -49,13 +102,14 @@ simulation/
     model.config           # Gazebo model metadata
     model.sdf              # Gazebo SDF (hull, thrusters, sensors, hydro)
 scripts/
-  rc_act_controls.py       # RC → MAVLink actuator controls
+  rc_act_controls.py       # RC -> MAVLink actuator controls
   testuDroneNanoKontrol.py # NanoKontrol test setpoints
 ```
 
 ## Installation
 
-These files are designed to be overlaid onto a [PX4-Autopilot](https://github.com/PX4/PX4-Autopilot) checkout.
+These files are designed to be overlaid onto a
+[PX4-Autopilot](https://github.com/PX4/PX4-Autopilot) checkout.
 
 ```bash
 # Clone PX4-Autopilot (if not already done)
@@ -101,6 +155,17 @@ make px4_sitl gz_xudrone
 ```
 
 This starts PX4 with the `underwater` Gazebo world and spawns the xudrone model.
+
+## Related Projects
+
+- [CoRAL — Collaborative Robotic Aquatic Laboratory](https://github.com/Earth-Innovation-Hub/CoRAL)
+- [PX4-Autopilot](https://github.com/PX4/PX4-Autopilot)
+
+## Acknowledgements
+
+- NSF CNS 1521617
+- NASA Flight Opportunities Tech Flights Lunar Lander ExoCam
+- Earth Innovation Hub
 
 ## License
 
