@@ -1,4 +1,4 @@
-# CoRAL Robotic Vehicles
+# AUV uDrone (CoRAL Robotic Vehicles)
 
 [![GitHub](https://img.shields.io/badge/GitHub-DREAMS--lab%2Fauv__udrone-blue?logo=github)](https://github.com/DREAMS-lab/auv_udrone)
 
