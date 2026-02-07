@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version='1.9'>
+  <model name='xroboato'>
+    <pose>0 0 0.05 0 0 0</pose>
+    <self_collide>false</self_collide>
+    <static>false</static>
+
+    <!-- ============================================================ -->
+    <!--  Base link: Heron-class catamaran hull                        -->
+    <!--  Length: 1.35 m, Width: 0.98 m, Height: 0.32 m               -->
+    <!--  Mass: 28 kg total (hull + payload + battery)                 -->
+    <!--  Draft: 0.15 m                                                -->
+    <!--  Two pontoons separated by 0.70 m (center-to-center)         -->
+    <!--  connected by a deck plate                                    -->
+    <!-- ============================================================ -->
+    <link name="base_link">
+      <inertial>
+        <mass>27.0</mass>
+        <inertia>
+          <!-- Catamaran inertia: wide beam, moderate length -->
+          <ixx>2.5</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>4.5</iyy>
+          <iyz>0</iyz>
+          <izz>5.5</izz>
+        </inertia>
+      </inertial>
+      <gravity>true</gravity>
+
+      <!-- Port pontoon (left, Y = -0.35) -->
+      <visual name="pontoon_port">
+        <pose>0 -0.35 -0.05 0 1.5707963 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.12</radius>
+            <length>1.20</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.8 0.6 0.1 1</ambient>
+          <diffuse>0.8 0.6 0.1 1</diffuse>
+          <specular>0.4 0.4 0.4 1</specular>
+        </material>
+      </visual>
+      <!-- Port pontoon nose cap -->
+      <visual name="pontoon_port_nose">
+        <pose>0.60 -0.35 -0.05 0 0 0</pose>
+        <geometry>
+          <sphere><radius>0.12</radius></sphere>
+        </geometry>
+        <material>
+          <ambient>0.85 0.65 0.15 1</ambient>
+          <diffuse>0.85 0.65 0.15 1</diffuse>
+        </material>
+      </visual>
+      <!-- Port pontoon tail cap -->
+      <visual name="pontoon_port_tail">
+        <pose>-0.60 -0.35 -0.05 0 0 0</pose>
+        <geometry>
+          <sphere><radius>0.12</radius></sphere>
+        </geometry>
+        <material>
+          <ambient>0.75 0.55 0.05 1</ambient>
+          <diffuse>0.75 0.55 0.05 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- Starboard pontoon (right, Y = +0.35) -->
+      <visual name="pontoon_starboard">
+        <pose>0 0.35 -0.05 0 1.5707963 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.12</radius>
+            <length>1.20</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.8 0.6 0.1 1</ambient>
+          <diffuse>0.8 0.6 0.1 1</diffuse>
+          <specular>0.4 0.4 0.4 1</specular>
+        </material>
+      </visual>
+      <!-- Starboard pontoon nose cap -->
+      <visual name="pontoon_starboard_nose">
+        <pose>0.60 0.35 -0.05 0 0 0</pose>
+        <geometry>
+          <sphere><radius>0.12</radius></sphere>
+        </geometry>
+        <material>
+          <ambient>0.85 0.65 0.15 1</ambient>
+          <diffuse>0.85 0.65 0.15 1</diffuse>
+        </material>
+      </visual>
+      <!-- Starboard pontoon tail cap -->
+      <visual name="pontoon_starboard_tail">
+        <pose>-0.60 0.35 -0.05 0 0 0</pose>
+        <geometry>
+          <sphere><radius>0.12</radius></sphere>
+        </geometry>
+        <material>
+          <ambient>0.75 0.55 0.05 1</ambient>
+          <diffuse>0.75 0.55 0.05 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- Deck plate connecting pontoons -->
+      <visual name="deck">
+        <pose>0 0 0.08 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.80 0.70 0.03</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.3 0.3 0.35 1</ambient>
+          <diffuse>0.3 0.3 0.35 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+
+      <!-- Electronics enclosure on deck -->
+      <visual name="enclosure">
+        <pose>0.05 0 0.15 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.30 0.25 0.10</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.2 0.2 0.25 1</ambient>
+          <diffuse>0.2 0.2 0.25 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- Forward heading marker -->
+      <visual name="forward_marker">
+        <pose>0.40 0 0.10 0 0 0</pose>
+        <geometry>
+          <box><size>0.06 0.02 0.04</size></box>
+        </geometry>
+        <material>
+          <ambient>1.0 0.3 0.0 1</ambient>
+          <diffuse>1.0 0.3 0.0 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- Collision: two pontoon boxes + deck -->
+      <collision name="pontoon_port_collision">
+        <pose>0 -0.35 -0.05 0 0 0</pose>
+        <geometry>
+          <box><size>1.35 0.24 0.24</size></box>
+        </geometry>
+        <surface>
+          <contact><ode><min_depth>0.003</min_depth><max_vel>0</max_vel></ode></contact>
+          <friction><ode/></friction>
+        </surface>
+      </collision>
+      <collision name="pontoon_starboard_collision">
+        <pose>0 0.35 -0.05 0 0 0</pose>
+        <geometry>
+          <box><size>1.35 0.24 0.24</size></box>
+        </geometry>
+        <surface>
+          <contact><ode><min_depth>0.003</min_depth><max_vel>0</max_vel></ode></contact>
+          <friction><ode/></friction>
+        </surface>
+      </collision>
+      <collision name="deck_collision">
+        <pose>0 0 0.08 0 0 0</pose>
+        <geometry>
+          <box><size>0.80 0.70 0.03</size></box>
+        </geometry>
+      </collision>
+
+      <!-- ======== Sensors ======== -->
+
+      <!-- IMU -->
+      <sensor name="imu_sensor" type="imu">
+        <gz_frame_id>base_link</gz_frame_id>
+        <always_on>1</always_on>
+        <update_rate>250</update_rate>
+        <imu>
+          <angular_velocity>
+            <x><noise type="gaussian"><mean>0</mean><stddev>0.0008726646</stddev></noise></x>
+            <y><noise type="gaussian"><mean>0</mean><stddev>0.0008726646</stddev></noise></y>
+            <z><noise type="gaussian"><mean>0</mean><stddev>0.0008726646</stddev></noise></z>
+          </angular_velocity>
+          <linear_acceleration>
+            <x><noise type="gaussian"><mean>0</mean><stddev>0.00637</stddev></noise></x>
+            <y><noise type="gaussian"><mean>0</mean><stddev>0.00637</stddev></noise></y>
+            <z><noise type="gaussian"><mean>0</mean><stddev>0.00637</stddev></noise></z>
+          </linear_acceleration>
+        </imu>
+      </sensor>
+
+      <!-- Barometer -->
+      <sensor name="air_pressure_sensor" type="air_pressure">
+        <gz_frame_id>base_link</gz_frame_id>
+        <always_on>1</always_on>
+        <update_rate>50</update_rate>
+        <air_pressure>
+          <pressure>
+            <noise type="gaussian"><mean>0</mean><stddev>3</stddev></noise>
+          </pressure>
+        </air_pressure>
+      </sensor>
+
+      <!-- Magnetometer -->
+      <sensor name="magnetometer_sensor" type="magnetometer">
+        <gz_frame_id>base_link</gz_frame_id>
+        <always_on>1</always_on>
+        <update_rate>100</update_rate>
+        <magnetometer>
+          <x><noise type="gaussian"><stddev>0.0001</stddev></noise></x>
+          <y><noise type="gaussian"><stddev>0.0001</stddev></noise></y>
+          <z><noise type="gaussian"><stddev>0.0001</stddev></noise></z>
+        </magnetometer>
+      </sensor>
+
+      <!-- GPS -->
+      <sensor name="navsat_sensor" type="navsat">
+        <gz_frame_id>base_link</gz_frame_id>
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+      </sensor>
+    </link>
+
+    <!-- ============================================================ -->
+    <!--  Thruster 0: port (rear-left)                                 -->
+    <!--  Water jet at rear of port pontoon                            -->
+    <!-- ============================================================ -->
+    <link name="rotor_0">
+      <pose>-0.60 -0.35 -0.05 0 1.5707963 0</pose>
+      <gravity>true</gravity>
+      <self_collide>false</self_collide>
+      <inertial>
+        <mass>0.5</mass>
+        <inertia>
+          <ixx>5.0e-04</ixx> <ixy>0</ixy> <ixz>0</ixz>
+          <iyy>5.0e-04</iyy> <iyz>0</iyz>
+          <izz>5.0e-04</izz>
+        </inertia>
+      </inertial>
+      <visual name="rotor_0_visual">
+        <geometry>
+          <cylinder><radius>0.04</radius><length>0.08</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.7 0.1 0.1 1</ambient>
+          <diffuse>0.7 0.1 0.1 1</diffuse>
+        </material>
+      </visual>
+    </link>
+    <joint name="rotor_0_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>rotor_0</child>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit><lower>-1e+16</lower><upper>1e+16</upper></limit>
+        <dynamics><spring_reference>0</spring_reference><spring_stiffness>0</spring_stiffness></dynamics>
+      </axis>
+    </joint>
+
+    <!-- ============================================================ -->
+    <!--  Thruster 1: starboard (rear-right)                           -->
+    <!--  Water jet at rear of starboard pontoon                       -->
+    <!-- ============================================================ -->
+    <link name="rotor_1">
+      <pose>-0.60 0.35 -0.05 0 1.5707963 0</pose>
+      <gravity>true</gravity>
+      <self_collide>false</self_collide>
+      <inertial>
+        <mass>0.5</mass>
+        <inertia>
+          <ixx>5.0e-04</ixx> <ixy>0</ixy> <ixz>0</ixz>
+          <iyy>5.0e-04</iyy> <iyz>0</iyz>
+          <izz>5.0e-04</izz>
+        </inertia>
+      </inertial>
+      <visual name="rotor_1_visual">
+        <geometry>
+          <cylinder><radius>0.04</radius><length>0.08</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.1 0.7 0.1 1</ambient>
+          <diffuse>0.1 0.7 0.1 1</diffuse>
+        </material>
+      </visual>
+    </link>
+    <joint name="rotor_1_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>rotor_1</child>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit><lower>-1e+16</lower><upper>1e+16</upper></limit>
+        <dynamics><spring_reference>0</spring_reference><spring_stiffness>0</spring_stiffness></dynamics>
+      </axis>
+    </joint>
+
+    <!-- ============================================================ -->
+    <!--  Motor model plugins — water jet thrusters                    -->
+    <!--  Heron max thrust ~25 N per jet at ~3.3 knots                 -->
+    <!-- ============================================================ -->
+    <plugin filename="gz-sim-multicopter-motor-model-system"
+            name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_0_joint</jointName>
+      <linkName>rotor_0</linkName>
+      <turningDirection>ccw</turningDirection>
+      <timeConstantUp>0.05</timeConstantUp>
+      <timeConstantDown>0.08</timeConstantDown>
+      <maxRotVelocity>400.0</maxRotVelocity>
+      <motorConstant>2.0e-04</motorConstant>
+      <momentConstant>0.005</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>0</motorNumber>
+      <rotorDragCoefficient>1.0e-04</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+    <plugin filename="gz-sim-multicopter-motor-model-system"
+            name="gz::sim::systems::MulticopterMotorModel">
+      <jointName>rotor_1_joint</jointName>
+      <linkName>rotor_1</linkName>
+      <turningDirection>cw</turningDirection>
+      <timeConstantUp>0.05</timeConstantUp>
+      <timeConstantDown>0.08</timeConstantDown>
+      <maxRotVelocity>400.0</maxRotVelocity>
+      <motorConstant>2.0e-04</motorConstant>
+      <momentConstant>0.005</momentConstant>
+      <commandSubTopic>command/motor_speed</commandSubTopic>
+      <motorNumber>1</motorNumber>
+      <rotorDragCoefficient>1.0e-04</rotorDragCoefficient>
+      <rollingMomentCoefficient>1e-06</rollingMomentCoefficient>
+      <rotorVelocitySlowdownSim>10</rotorVelocitySlowdownSim>
+      <motorType>velocity</motorType>
+    </plugin>
+
+    <!-- ============================================================ -->
+    <!--  Hydrodynamics: Fossen 6-DOF for surface vessel               -->
+    <!--  Catamaran: 1.35 m × 0.98 m, 28 kg                           -->
+    <!--  High sway/yaw drag from twin pontoons                        -->
+    <!--  Low surge drag (streamlined hulls)                            -->
+    <!-- ============================================================ -->
+    <plugin filename="gz-sim-hydrodynamics-system"
+            name="gz::sim::systems::Hydrodynamics">
+      <link_name>base_link</link_name>
+
+      <!-- Added mass [kg] / [kg*m^2] -->
+      <xDotU>-3.0</xDotU>       <!-- surge  (streamlined catamaran) -->
+      <yDotV>-25.0</yDotV>      <!-- sway   (wide beam resistance) -->
+      <zDotW>-25.0</zDotW>      <!-- heave  -->
+      <kDotP>-0.5</kDotP>       <!-- roll   (catamaran roll inertia) -->
+      <mDotQ>-5.0</mDotQ>       <!-- pitch  -->
+      <nDotR>-5.0</nDotR>       <!-- yaw    (wide beam) -->
+
+      <!-- Quadratic drag: F = -C*|v|*v -->
+      <xUabsU>-15.0</xUabsU>    <!-- surge  (twin hull skin friction) -->
+      <yVabsV>-200.0</yVabsV>   <!-- sway   (broadside, two pontoons) -->
+      <zWabsW>-200.0</zWabsW>   <!-- heave  -->
+      <kPabsP>-5.0</kPabsP>     <!-- roll   (pontoon damping) -->
+      <mQabsQ>-30.0</mQabsQ>    <!-- pitch  -->
+      <nRabsR>-80.0</nRabsR>    <!-- yaw    (wide-beam differential) -->
+
+      <!-- Linear drag (low-speed viscous) -->
+      <xU>-5.0</xU>             <!-- surge  -->
+      <yV>-15.0</yV>            <!-- sway   -->
+      <zW>-15.0</zW>            <!-- heave  -->
+      <kP>-2.0</kP>             <!-- roll   -->
+      <mQ>-5.0</mQ>             <!-- pitch  -->
+      <nR>-10.0</nR>            <!-- yaw    -->
+    </plugin>
+
+  </model>
+</sdf>
